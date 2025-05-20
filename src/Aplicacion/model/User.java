@@ -9,7 +9,7 @@ package Aplicacion.model;
 public class User {
     private Long id;
     private String username;
-    private String password; // Remember to hash this in a real application!
+    private String password; 
     private Role role;
 
     public User() {}
