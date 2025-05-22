@@ -1,0 +1,243 @@
+@startuml
+' Configuración general del diagrama
+hide empty members
+skinparam classAttributeIconSize 0 ' Oculta los iconos de visibilidad (más limpio)
+skinparam linetype ortho ' Líneas rectas para mayor claridad
+'skinparam packageStyle rectangle ' Puedes probar este estilo si prefieres cajas sólidas para los paquetes
+
+' ===================================================================================================
+' CAPA DE MODELO (com.tuaplicacion.inventario.model)
+' ===================================================================================================
+package "model" {
+    class User {
+        - id: Long
+        - username: String
+        - password: String
+        - role: Role
+        --
+        + getId(): Long
+        + setUsername(String)
+        + getPassword(): String
+        + setPassword(String)
+        + getRole(): Role
+        + setRole(Role)
+    }
+
+    enum Role {
+        ADMINISTRATOR
+        CONSULTATION
+        STANDARD
+    }
+
+    abstract class Device {
+        - id: Long
+        - active: boolean
+        - serial: String
+        - model: String
+        - processor: String
+        - ram: String
+        - hardDrive: String
+        - assignedUser: User
+        - userIdentification: String
+        - userPosition: String
+        - costCenter: String
+        - area: String
+        - management: String
+        - location: String
+        - contract: String
+        --
+        + getId(): Long
+        + setId(Long)
+        + isActive(): boolean
+        + setActive(boolean)
+        + getSerial(): String
+        + setSerial(String)
+        + getModel(): String
+        + setModel(String)
+        + getProcessor(): String
+        + setProcessor(String)
+        + getRam(): String
+        + setRam(String)
+        + getHardDrive(): String
+        + setHardDrive(String)
+        + getAssignedUser(): User
+        + setAssignedUser(User)
+        + getUserIdentification(): String
+        + setUserIdentification(String)
+        + getUserPosition(): String
+        + setUserPosition(String)
+        + getCostCenter(): String
+        + setCostCenter(String)
+        + getArea(): String
+        + setArea(String)
+        + getManagement(): String
+        + setManagement(String)
+        + getLocation(): String
+        + setLocation(String)
+        + getContract(): String
+        + setContract(String)
+    }
+
+    ' === CLASES QUE HEREDAN ===
+    ' NOTA IMPORTANTE: La herencia de 'Computer' a 'Device' se establece ÚNICAMENTE con 'extends Device'.
+    ' No se necesita ninguna otra línea como 'Device <|-- Computer'.
+    class Computer extends Device {
+        - operatingSystem: String
+        --
+        + getOperatingSystem(): String
+        + setOperatingSystem(String)
+    }
+
+    ' Relaciones de Asociación dentro del Modelo
+    User "1" -- "0..*" Device : "asigna a"
+    User "1" -- "1" Role : "tiene un"
+}
+
+' ===================================================================================================
+' CAPA DE ACCESO A DATOS (com.tuaplicacion.inventario.data_access)
+' ===================================================================================================
+package "data_access" {
+    interface ComputerDataAccess {
+        + get(id: Long): Computer
+        + getAll(): List<Computer>
+        + save(computer: Computer)
+        + update(computer: Computer)
+        + delete(id: Long)
+    }
+
+    class ComputerDataAccessImpl {
+        - computers: Map<Long, Computer>
+        - nextId: AtomicLong
+        --
+        + get(id: Long): Computer
+        + getAll(): List<Computer>
+        + save(computer: Computer)
+        + update(computer: Computer)
+        + delete(id: Long)
+    }
+    ComputerDataAccess <|.. ComputerDataAccessImpl
+
+
+    interface UserDataAccess {
+        + get(id: Long): User
+        + getByUsername(username: String): User
+        + getAll(): List<User>
+        + save(user: User)
+        + update(user: User)
+        + delete(id: Long)
+    }
+
+    class UserDataAccessImpl {
+        - users: Map<Long, User>
+        - usersByUsername: Map<String, User>
+        - nextId: AtomicLong
+        --
+        + get(id: Long): User
+        + getByUsername(username: String): User
+        + getAll(): List<User>
+        + save(user: User)
+        + update(user: User)
+        + delete(id: Long)
+    }
+    UserDataAccess <|.. UserDataAccessImpl
+
+
+    ' Relaciones de Asociación (DataAccess gestiona Modelo)
+    ComputerDataAccess "1" -- "0..*" Computer : "gestiona" >
+    UserDataAccess "1" -- "0..*" User : "gestiona" >
+}
+
+' ===================================================================================================
+' CAPA DE SERVICIO (com.tuaplicacion.inventario.service)
+' ===================================================================================================
+package "service" {
+    interface ComputerService {
+        + getDevice(id: Long): Computer
+        + getAllDevices(): List<Computer>
+        + addDevice(computer: Computer)
+        + updateDevice(computer: Computer)
+        + removeDevice(id: Long)
+    }
+
+    class ComputerServiceImpl {
+        - computerDataAccess: ComputerDataAccess
+        --
+        + getDevice(id: Long): Computer
+        + getAllDevices(): List<Computer>
+        + addDevice(computer: Computer)
+        + updateDevice(computer: Computer)
+        + removeDevice(id: Long)
+    }
+    ComputerService <|.. ComputerServiceImpl
+
+
+    interface UserService {
+        + getUser(id: Long): User
+        + getUserByUsername(username: String): User
+        + getAllUsers(): List<User>
+        + addUser(user: User)
+        + updateUser(user: User)
+        + removeUser(id: Long)
+    }
+
+    class UserServiceImpl {
+        - userDataAccess: UserDataAccess
+        --
+        + getUser(id: Long): User
+        + getUserByUsername(username: String): User
+        + getAllUsers(): List<User>
+        + addUser(user: User)
+        + updateUser(user: User)
+        + removeUser(id: Long)
+    }
+    UserService <|.. UserServiceImpl
+
+
+    ' Relaciones de Dependencia (Servicio usa DataAccess)
+    ' PlantUML infiere estas relaciones a partir de los atributos declarados en ComputerServiceImpl y UserServiceImpl.
+    ' No es necesario repetirlas aquí de forma explícita.
+}
+
+' ===================================================================================================
+' CAPA DE INTERFAZ DE USUARIO (com.tuaplicacion.inventario.ui)
+' ===================================================================================================
+package "ui" {
+    class ConsoleUI {
+        - computerService: ComputerService
+        - userService: UserService
+        - scanner: Scanner
+        --
+        + main()
+        + showMainMenu()
+        + showUserMenu()
+        + addUserConsole()
+        + viewAllUsersConsole()
+        + viewUserByIdConsole()
+        + updateUserConsole()
+        + deleteUserConsole()
+        + showComputerMenu()
+        + addComputerConsole()
+        + viewAllComputersConsole()
+        + viewComputerByIdConsole()
+        + updateComputerConsole()
+        + deleteComputerConsole()
+    }
+    ' NOTA: Las dependencias de ConsoleUI a los servicios se infieren por sus atributos.
+    '       No se necesitan líneas explícitas aquí.
+}
+
+' ===================================================================================================
+' RELACIONES INTER-PAQUETES (Solo si PlantUML no las infiere correctamente o para posicionamiento)
+' IMPORTANTE: NO DUPLICAR RELACIONES YA DEFINIDAS POR ATRIBUTOS O HERENCIAS/IMPLEMENTACIONES.
+' ===================================================================================================
+
+' Estas líneas ayudan a PlantUML a dibujar las conexiones entre paquetes y a organizar el diagrama,
+' pero no duplican las relaciones ya que confíamos en la inferencia por atributos dentro de las clases.
+service.ComputerServiceImpl ..> data_access.ComputerDataAccess
+service.UserServiceImpl ..> data_access.UserDataAccess
+ui.ConsoleUI ..> service.ComputerService
+ui.ConsoleUI ..> service.UserService
+data_access.ComputerDataAccess ..> model.Computer
+data_access.UserDataAccess ..> model.User
+
+@enduml
