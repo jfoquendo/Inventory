@@ -5,5 +5,5 @@
 package Aplicacion.model;
 
 public enum Role {
-    ADMINISTRATOR, CONSULTATION, STANDARD
+    ADMINISTRATOR, CONSULTATION, STANDARD, USER
 }

@@ -7,6 +7,7 @@ package UI;
 import Aplicacion.model.Computer;
 import Aplicacion.model.Role;
 import Aplicacion.model.User;
+import Aplicacion.model.CsvManager;
 import Interfaces.ComputerService;
 import Interfaces.TabletService;
 import Interfaces.UserService;
@@ -17,13 +18,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleUI {
-
+    
+    private static final CsvManager loadComputer = new CsvManager();
     private static final ComputerService computerService = new ComputerServiceImpl();
     private static final TabletService tabletService = new TabletServiceImpl();
     private static final UserService userService = new UserServiceImpl();
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        loadComputer.readComputer(userService);
         showMainMenu();
     }
 
@@ -42,7 +45,7 @@ public class ConsoleUI {
             switch (option) {
                 case 1 -> showUserMenu();
                 case 2 -> showComputerMenu();
-//                case 3 -> showTabletMenu();
+//              case 3 -> showTabletMenu();
                 case 0 -> System.out.println("Exiting the application.");
                 default -> System.out.println("Invalid option.");
             }
