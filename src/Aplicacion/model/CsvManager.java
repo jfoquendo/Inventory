@@ -8,15 +8,16 @@ import Aplicacion.model.User;
 import Interfaces.UserService;
 import implementations.UserServiceImpl;
 import Aplicacion.model.Role;
+import implementations.ComputerServiceImpl;
 
 public class CsvManager {
-    private static final UserService userService = new UserServiceImpl();
+
     
 
     public CsvManager() {
     }
     
-    public void readComputer(UserService userService) {
+    public void readComputer(UserService userService, ComputerService computerService) {
         String archivo = "inventario.csv";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
@@ -50,7 +51,8 @@ public class CsvManager {
                 
                 Computer loadComputer = new Computer(state, serial, model, processor, ram,disk, assignedUser, id, userposition, costcenter, area, management, location, contract, OperationSystem);
                 
-                
+                computerService.addDevice(loadComputer);
+                System.out.println("Computer added successfully.");
             }
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
