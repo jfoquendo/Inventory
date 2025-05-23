@@ -49,7 +49,10 @@ public class CsvManager {
                 
                 User assignedUser = new User(username,"123456",Role.USER);
                 
+                userService.addUser(assignedUser);
+                
                 Computer loadComputer = new Computer(state, serial, model, processor, ram,disk, assignedUser, id, userposition, costcenter, area, management, location, contract, OperationSystem);
+                
                 
                 computerService.addDevice(loadComputer);
                 System.out.println("Computer added successfully.");
