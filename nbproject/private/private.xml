@@ -3,12 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/Aplicacion/model/CsvManager.java</file>
             <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/implementations/ComputerDataAccessImplCsv.java</file>
+            <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/Interfaces/UserDataAccess.java</file>
+            <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/implementations/UserServiceImpl.java</file>
+            <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/UI/ConsoleUI.java</file>
             <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/implementations/ComputerServiceImpl.java</file>
-            <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/Aplicacion/model/User.java</file>
-            <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/Aplicacion/model/Role.java</file>
-            <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/implementations/UserDataAccessImplCsv.java</file>
+            <file>file:/C:/Users/exssjfoquend/Documents/NetBeansProjects/Inventory/src/Interfaces/UserService.java</file>
         </group>
     </open-files>
 </project-private>
