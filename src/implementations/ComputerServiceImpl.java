@@ -4,7 +4,7 @@
  */
 package implementations;
 
-
+import implementations.ComputerDataAccessImplCsv;
 import Aplicacion.model.Computer;
 import Interfaces.ComputerDataAccess;
 import implementations.ComputerDataAccessImpl;
@@ -13,7 +13,8 @@ import java.util.List;
 
 public class ComputerServiceImpl implements ComputerService {
 
-    private final ComputerDataAccess computerDataAccess = new ComputerDataAccessImpl();
+    
+    private final ComputerDataAccess computerDataAccess = new ComputerDataAccessImplCsv();
 
     @Override
     public Computer getDevice(Long id) {
