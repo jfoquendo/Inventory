@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package implementations;
 
+import implementations.UserDataAccessImplCsv;
 import Aplicacion.model.User;
 import Interfaces.UserDataAccess;
 import implementations.UserDataAccessImpl;
@@ -12,7 +10,7 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final UserDataAccess userDataAccess = new UserDataAccessImpl();
+    private final UserDataAccess userDataAccess = new UserDataAccessImplCsv();
 
     @Override
     public User getUser(Long id) {

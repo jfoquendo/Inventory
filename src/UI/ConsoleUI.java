@@ -7,7 +7,7 @@ package UI;
 import Aplicacion.model.Computer;
 import Aplicacion.model.Role;
 import Aplicacion.model.User;
-import Aplicacion.model.CsvManager;
+//import Aplicacion.model.CsvManager;
 import Interfaces.ComputerService;
 import Interfaces.TabletService;
 import Interfaces.UserService;
@@ -19,14 +19,15 @@ import java.util.Scanner;
 
 public class ConsoleUI {
     
-    private static final CsvManager loadComputer = new CsvManager();
-    private static final ComputerService computerService = new ComputerServiceImpl();
+//    private static final CsvManager loadComputer = new CsvManager();
+    
     private static final TabletService tabletService = new TabletServiceImpl();
     private static final UserService userService = new UserServiceImpl();
     private static final Scanner scanner = new Scanner(System.in);
+    private static final ComputerService computerService = new ComputerServiceImpl(userService);
 
     public static void main(String[] args) {
-        loadComputer.readComputer(userService, computerService);
+//        loadComputer.readComputer(userService, computerService);
         showMainMenu();
     }
 

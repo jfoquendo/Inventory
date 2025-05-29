@@ -9,13 +9,21 @@ import Aplicacion.model.Computer;
 import Interfaces.ComputerDataAccess;
 import implementations.ComputerDataAccessImpl;
 import Interfaces.ComputerService;
+import Interfaces.UserService;
 import java.util.List;
 
 public class ComputerServiceImpl implements ComputerService {
 
     
-    private final ComputerDataAccess computerDataAccess = new ComputerDataAccessImplCsv();
+    private final ComputerDataAccess computerDataAccess;
+    private final UserService userService;
 
+    public ComputerServiceImpl(UserService userService) {
+        this.userService = userService;
+        this.computerDataAccess = new ComputerDataAccessImplCsv(userService);
+    }
+    
+    
     @Override
     public Computer getDevice(Long id) {
         return computerDataAccess.get(id);

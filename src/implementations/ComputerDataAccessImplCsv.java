@@ -21,10 +21,11 @@ public class ComputerDataAccessImplCsv implements ComputerDataAccess {
     private AtomicLong nextId;
 
     
-    private final UserService userService = new UserServiceImpl();
+    private final UserService userService;
+    
 
-    public ComputerDataAccessImplCsv() {
-        
+    public ComputerDataAccessImplCsv(UserService userService) {
+        this.userService = userService;
         File file = new File(CSV_FILE_PATH);
         if (!file.exists()) {
             try {
@@ -39,7 +40,7 @@ public class ComputerDataAccessImplCsv implements ComputerDataAccess {
 
     private void writeCsvHeader() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_PATH, false))) { // false para sobrescribir
-            writer.write("id,active,serial,model,processor,ram,hardDrive,assignedUserId,userIdentification,userPosition,costCenter,area,management,location,contract,operatingSystem\n");
+            writer.write("id,active,serial,model,processor,ram,hardDrive,assignedUsername,userIdentification,userPosition,costCenter,area,management,location,contract,operatingSystem\n");
         } catch (IOException e) {
             System.err.println("Error al escribir la cabecera CSV: " + e.getMessage());
         }
@@ -173,7 +174,7 @@ public class ComputerDataAccessImplCsv implements ComputerDataAccess {
         // Asegúrate de que todos los campos se manejen, incluyendo los de Device
         // y que los campos que puedan contener comas se encierren entre comillas si usas un parser CSV más avanzado.
         // Aquí, para simplificar, asumimos que los campos no tienen comas.
-        Long assignedUserId = (computer.getAssignedUser() != null) ? computer.getAssignedUser().getId() : null;
+        String assignedUsername = (computer.getAssignedUser() != null) ? computer.getAssignedUser().getUsername() : "";
 
         return String.join(CSV_DELIMITER,
                 String.valueOf(computer.getId()),
@@ -183,7 +184,7 @@ public class ComputerDataAccessImplCsv implements ComputerDataAccess {
                 escapeCsv(computer.getProcessor()),
                 escapeCsv(computer.getRam()),
                 escapeCsv(computer.getHardDrive()),
-                (assignedUserId != null ? String.valueOf(assignedUserId) : ""), 
+                escapeCsv(assignedUsername), 
                 escapeCsv(computer.getUserIdentification()),
                 escapeCsv(computer.getUserPosition()),
                 escapeCsv(computer.getCostCenter()),
@@ -210,12 +211,13 @@ public class ComputerDataAccessImplCsv implements ComputerDataAccess {
             computer.setProcessor(unescapeCsv(parts[4]));
             computer.setRam(unescapeCsv(parts[5]));
             computer.setHardDrive(unescapeCsv(parts[6]));
-
+            String assignedUsername = unescapeCsv(parts[7]);
            
-            if (!parts[7].isEmpty()) {
-                Long assignedUserId = Long.parseLong(parts[7]);
-                User assignedUser = userService.getUser(assignedUserId); 
-                computer.setAssignedUser(assignedUser);
+            if (!assignedUsername.isEmpty()) {
+                User assignedUser = userService.getUserByUsername(assignedUsername); 
+                if (assignedUser != null) {
+                    computer.setAssignedUser(assignedUser);
+                } 
             } else {
                 computer.setAssignedUser(null);
             }
