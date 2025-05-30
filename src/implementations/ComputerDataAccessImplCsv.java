@@ -61,7 +61,7 @@ public class ComputerDataAccessImplCsv implements ComputerDataAccess {
                             maxId = currentId;
                         }
                     } catch (NumberFormatException e) {
-                        // Ignorar líneas con ID no numérico
+                      
                     }
                 }
             }
@@ -120,18 +120,18 @@ public class ComputerDataAccessImplCsv implements ComputerDataAccess {
 
     @Override
     public void update(Computer computer) {
-        List<Computer> allComputers = getAll(); // Leer todos los datos
+        List<Computer> allComputers = getAll(); 
         boolean found = false;
         for (int i = 0; i < allComputers.size(); i++) {
             if (allComputers.get(i).getId().equals(computer.getId())) {
-                allComputers.set(i, computer); // Reemplazar el objeto
+                allComputers.set(i, computer);
                 found = true;
                 break;
             }
         }
 
         if (found) {
-            // Reescribir todo el archivo con los datos actualizados
+            
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_PATH, false))) { // false para sobrescribir
                 writeCsvHeader(); // Reescribir la cabecera
                 for (Computer c : allComputers) {
@@ -153,10 +153,10 @@ public class ComputerDataAccessImplCsv implements ComputerDataAccess {
                                                     .filter(c -> !c.getId().equals(id))
                                                     .collect(Collectors.toList());
 
-        if (updatedComputers.size() < allComputers.size()) { // Si se eliminó al menos uno
-            // Reescribir todo el archivo sin el elemento eliminado
+        if (updatedComputers.size() < allComputers.size()) { 
+            
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_PATH, false))) { // false para sobrescribir
-                writeCsvHeader(); // Reescribir la cabecera
+                writeCsvHeader(); 
                 for (Computer c : updatedComputers) {
                     writer.write(formatComputerToCsvLine(c));
                     writer.newLine();
@@ -237,8 +237,6 @@ public class ComputerDataAccessImplCsv implements ComputerDataAccess {
             return null;
         }
     }
-
-    // Simple escape/unescape para CSV (no maneja comillas dentro de campos con comas)
     private String escapeCsv(String value) {
         return value != null ? value.replace(CSV_DELIMITER, "\\" + CSV_DELIMITER) : "";
     }
